@@ -23,8 +23,10 @@
 // %EndTag(ANDROID_NATIVE_HEADER)%
 
 int loop_count_ = 0;
+#define LASTERR strerror(errno);
 ros::Publisher speed_pub;
 ros::Publisher steering_pub;
+ros::Publisher stop_pub;
 
 void log(const char *msg, ...) {
     va_list args;
@@ -44,7 +46,7 @@ static double now(void) {
 
 }
 
-#define LASTERR strerror(errno)
+
 
 // %Tag(CHATTER_CALLBACK)%
 
@@ -59,6 +61,14 @@ void Java_com_ros_sampleapp_sampleApp_changeSteering(JNIEnv *env,jobject thiz,ji
     std_msgs::Int16 manual_steering;
     manual_steering.data=manualSteering;
     steering_pub.publish(manual_steering);
+
+}
+
+void Java_com_ros_sampleapp_sampleApp_changeStopStart(JNIEnv *env,jobject thiz,jint manualStopStart)
+{
+    std_msgs::Int16 stop_value;
+    stop_value.data=manualStopStart;
+    stop_pub.publish(stop_value);
 }
 // %Tag(MAIN)%
 void
@@ -107,7 +117,8 @@ Java_com_ros_sampleapp_sampleApp_init(JNIEnv *env,
     // %Tag(ROS_CONF_SUB_PUB)%
     speed_pub = n.advertise<std_msgs::Int16>("/manual_control/speed", 2);
     steering_pub = n.advertise<std_msgs::Int16>("/manual_control/steering", 2);
-    ros::WallRate loop_rate(100);
+    stop_pub = n.advertise<std_msgs::Int16>("/manual_control/stop_start", 2);
+    //ros::WallRate loop_rate(100);
     // %EndTag(ROS_CONF_SUB_PUB)%
 
     log("GOING TO SPIN");

@@ -12,12 +12,15 @@ extern "C" {
  * Method:    getNativeMessage
  * Signature: ()Ljava/lang/String;
  */
+JNIEXPORT void JNICALL Java_com_ros_sampleapp_sampleApp_changeStopStart
+  (JNIEnv *, jobject,jint);
 JNIEXPORT void JNICALL Java_com_ros_sampleapp_sampleApp_init
   (JNIEnv *, jobject);
 JNIEXPORT void JNICALL Java_com_ros_sampleapp_sampleApp_changeSpeed
   (JNIEnv *, jobject,jint);
 JNIEXPORT void JNICALL Java_com_ros_sampleapp_sampleApp_changeSteering
   (JNIEnv *, jobject,jint);
+
 
 #ifdef __cplusplus
 }

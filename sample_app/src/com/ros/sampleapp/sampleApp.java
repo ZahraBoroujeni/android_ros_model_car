@@ -53,12 +53,14 @@ public class sampleApp extends Activity
             public void onClick(View view) {
                 // ignore the return value
                 init();
+                changeStopStart(0);
             }
         });
 
         ((Button) findViewById(R.id.stop)).setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 // ignore the return value
+                changeStopStart(1);
             }
         });
 
@@ -80,17 +82,19 @@ public class sampleApp extends Activity
 
         seekBarSteering.setOnSeekBarChangeListener(
                 new OnSeekBarChangeListener() {
-            int lastProgress = 100;
+            int lastProgress = 50;
+            int steering_angle = lastProgress*(9/5);
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                lastProgress = progress-seekBarSteering.getMax()/2;
-                textProgressSteering.setText(lastProgress + "/" + seekBarSteering.getMax()/2);
-                changeSteering(lastProgress);
+                lastProgress = progress;
+                textProgressSteering.setText(lastProgress-seekBarSteering.getMax()/2 + "/" + seekBarSteering.getMax()/2);
+                steering_angle = (lastProgress/5)*9;
+                changeSteering(steering_angle);
             }
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
             public void onStopTrackingTouch(SeekBar seekBar) {
-                int attenuation = 100 - lastProgress;
-                changeSteering(attenuation);
+                steering_angle = (lastProgress/5)*9;
+                changeSteering(steering_angle);
             }
         });
     }
@@ -100,6 +104,7 @@ public class sampleApp extends Activity
     public native void init();
     public native void changeSpeed(int manualSteering);
     public native void changeSteering(int manualSpeed);
+    public native void changeStopStart(int manualStopStart);
 
 
    
