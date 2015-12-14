@@ -1,0 +1,7 @@
+<project name="custom_rules" default="debug">
+    <target name="-pre-build">
+      <exec executable="/home/zargol/android_ros_model_car/android-ndk-r10e/ndk-build" failonerror="true">
+        <env key="NDK_MODULE_PATH" path="/home/zargol/android_ros_model_car/" />
+        </exec>
+    </target>
+</project>
