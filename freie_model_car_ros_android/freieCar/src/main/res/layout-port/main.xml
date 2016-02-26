@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:contentDescription="Freie Car"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:id="@+id/top_view"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_marginBottom="20dp"
+        android:background="#ff404040"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="50dip"
+            android:onClick="back"
+            android:text="Back" />
+
+        <LinearLayout
+            android:id="@+id/top_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff404040"
+            android:gravity="right"
+            android:orientation="horizontal" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/view"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/top_view"
+        android:gravity="bottom"
+        android:layout_gravity="bottom"
+        android:background="@android:color/transparent">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/button_steering"
+            android:src="@drawable/wheel_inactive"
+            android:contentDescription="@string/steering"
+            android:gravity="bottom"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"
+            />
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/button_stop"
+            android:src="@drawable/emergency_stop_active"
+            android:gravity="bottom"
+            android:contentDescription="@string/emergency_stop"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"/>
+        <SeekBar
+            android:id="@+id/seekBar_speed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/speed"
+            android:max="2000"
+            android:progress="1000"
+            android:rotation="270"
+            android:gravity="right" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>
