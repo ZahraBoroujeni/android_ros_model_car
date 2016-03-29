@@ -1,14 +1,11 @@
 <?xml version="1.0"?>
 <package>
-  <name>turtlebot_android</name>
+  <name>car_control_android</name>
   <version>0.1.0</version>
   <description>
-    Android applications and libraries for turtlebot.
+    Android applications and libraries for a model car.
   </description>
-  <url type="website">http://ros.org/wiki/turtlebot_android</url>
-  <url type="repository">https://github.com/turtlebot/turtlebot_android</url>
-  <url type="bugtracker">https://github.com/turtlebot/turtlebot_android/issues</url>
-  <maintainer email="d.stonier@gmail.com">Daniel Stonier</maintainer>
+  <maintainer email="zahra.boroujeni@gmail.com">Zahra Boroujeni</maintainer>
   <license>Apache 2.0</license>
 
   <buildtool_depend>catkin</buildtool_depend>

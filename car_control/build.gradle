@@ -24,7 +24,7 @@ buildscript {
 apply plugin: 'catkin'
 
 allprojects {
-    group 'com.github.turtlebot.turtlebot_android'
+    group 'com.github.autoauto.car_control_android'
     version = project.catkin.pkg.version
 }
 

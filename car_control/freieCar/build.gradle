@@ -34,7 +34,7 @@ android {
   }
   productFlavors {
     indigo {
-      applicationId "com.github.turtlebot.turtlebot_android.freieCar.indigo"
+      applicationId "com.github.autoauto.car_control.freieCar.indigo"
     }
   }
 }

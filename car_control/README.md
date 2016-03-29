@@ -1,4 +1,4 @@
-turtlebot_android
+car_control_android
 =================
 
-Android app development for the turtlebot.
+Android app development for the model car.
