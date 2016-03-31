@@ -35,7 +35,7 @@ public class VisualGPSFragment extends Fragment {
         ImageView imageView = (ImageView) getView().findViewById(R.id.gps_image_view);
         freieCarActivity.setLayoutGPS(layout, imageView);
 
-        freieCarActivity.dummyDrawMarker(50, 50);
+        freieCarActivity.drawMarker(400, 1200);
     }
 
 

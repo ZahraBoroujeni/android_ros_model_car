@@ -287,23 +287,28 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
         });
 
 
-        // TODO subscribe to transformation msgs and convert position for marker in image
-//        String gpsTfTopic = appNameSpace.resolve("/camera/rgb/image_raw/compressed").toString();
-//
-//        Subscriber<sensor_msgs.CompressedImage> subscriberGpsTf = connectedNode.newSubscriber(panoImgTopic, sensor_msgs.CompressedImage._TYPE);
-//        subscriberGpsTf.addMessageListener(new MessageListener<CompressedImage>() {
-//            @Override
-//            public void onNewMessage(final sensor_msgs.CompressedImage message) {
-//                imageViewGPS.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        BitmapDrawable ob = new BitmapDrawable(getResources(), callable.call(message));
-//
-//                    }
-//                });
-//                imageViewGPS.postInvalidate();
-//            }
-//        });
+        String gpsTransformTopic = appNameSpace.resolve("/geometry_msgs/Transform").toString();
+
+        Subscriber<geometry_msgs.Transform> subscriberGpsTf = connectedNode.newSubscriber(gpsTransformTopic, geometry_msgs.Transform._TYPE);
+        subscriberGpsTf.addMessageListener(new MessageListener<geometry_msgs.Transform>() {
+            @Override
+            public void onNewMessage(final geometry_msgs.Transform message) {
+                imageViewGPS.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        geometry_msgs.Vector3  translation = message.getTranslation();
+                        geometry_msgs.Quaternion rotation = message.getRotation();
+
+                        // TODO convert to pixel scale
+                        double map_length_centimeter = 700;
+                        double map_width_centimeter = 500;
+
+                        drawMarker((int) translation.getX(), (int) translation.getY());
+                    }
+                });
+                imageViewGPS.postInvalidate();
+            }
+        });
 
         callPublishStopStart(stop);//emergency stop active
         SeekBar speedBar1 = (SeekBar) findViewById(R.id.seekBar_speed);
@@ -311,18 +316,19 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     }
 
-    public void dummyDrawMarker(int x, int y) {
+    public void drawMarker(int x, int y) {
         Drawable d = ContextCompat.getDrawable(this, R.drawable.kitchen);
-        Log.d("dummyDrawMarker",d.getIntrinsicWidth()+"");
-
-        Bitmap tempBitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.RGB_565);
+        Bitmap tempBitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_4444);
         Canvas tempCanvas = new Canvas(tempBitmap);
         Paint myPaint = new Paint();
-        myPaint.setColor(Color.rgb(200, 0, 0));
+        myPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        myPaint.setColor(Color.GREEN);
         myPaint.setStrokeWidth(10);
-        tempCanvas.drawRoundRect(new RectF(x, y, 20, 20), 2, 2, myPaint);
+        myPaint.setAlpha(220);
+        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         d.draw(tempCanvas);
-        imageViewGPS.setImageDrawable(d);
+        tempCanvas.drawRoundRect(new RectF(x, y, x + 150, y + 150), 75, 75, myPaint);
+        imageViewGPS.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));
     }
 
     @Override
