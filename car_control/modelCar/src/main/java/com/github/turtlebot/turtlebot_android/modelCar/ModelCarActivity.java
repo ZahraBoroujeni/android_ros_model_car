@@ -1,11 +1,10 @@
-package com.github.turtlebot.turtlebot_android.freieCar;
+package com.github.turtlebot.turtlebot_android.modelCar;
 
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.content.ContextCompat;
@@ -18,8 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
-import com.github.turtlebot.turtlebot_android.freieCar.view.ViewPagerAdapter;
-import com.github.turtlebot.turtlebot_android.freieCar.view.VisualGPSFragment;
+import com.github.turtlebot.turtlebot_android.modelCar.view.ViewPagerAdapter;
+import com.github.turtlebot.turtlebot_android.modelCar.view.VisualGPSFragment;
 
 import org.ros.address.InetAddressFactory;
 import org.ros.android.MessageCallable;
@@ -34,22 +33,15 @@ import org.ros.node.NodeMainExecutor;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 
-import java.util.Timer;
-import java.util.logging.Handler;
-
 import sensor_msgs.CompressedImage;
 
 
-public class FreieCarActivity extends RosAppActivity implements NodeMain {
+public class ModelCarActivity extends RosAppActivity implements NodeMain {
 
     private RelativeLayout layoutControl;
     private LinearLayout layoutGPS;
     private ImageView imageViewGPS;
 
-    /**
-     * The number of pages (wizard steps) to show in this demo.
-     */
-    private static final int NUM_PAGES = 2;
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -63,53 +55,10 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     private ConnectedNode node;
     private final MessageCallable<Bitmap, sensor_msgs.CompressedImage> callable = new ScaledBitmapFromCompressedImage(2);
-
-    private SensorManager mSensorManager = null;
-
-    // angular speeds from gyro
-    private float[] gyro = new float[3];
-
-    // rotation matrix from gyro data
-    private float[] gyroMatrix = new float[9];
-
-    // orientation angles from gyro matrix
-    private float[] gyroOrientation = new float[3];
-
-    // magnetic field vector
-    private float[] rotation = new float[3];
-
-    private float[] magnet = new float[3];
-
-    // accelerometer vector
-    private float[] accel = new float[3];
-
-    // orientation angles from accel and magnet
-    private float[] accMagOrientation = new float[3];
-
-    // final orientation angles from sensor fusion
-    private float[] fusedOrientation = new float[3];
-
-    // accelerometer and magnetometer based rotation matrix
-    private float[] rotationMatrix = new float[9];
-
-    public static final float EPSILON = 0.000000001f;
-    private static final float NS2S = 1.0f / 1000000000.0f;
-    private long timestamp;
-    private boolean initState = true;
-
-    public static final int TIME_CONSTANT = 30;
-    public static final float FILTER_COEFFICIENT = 0.98f;
-    private Timer fuseTimer = new Timer();
-
-    private boolean first_time = true;
-    private short first_head = 0;
     private short stop = 1;
-    // The following members are only for displaying the sensor output.
-    public Handler mHandler;
 
-
-    public FreieCarActivity() {
-        super("FreieCarActivity", "FreieCarActivity");
+    public ModelCarActivity() {
+        super("ModelCarActivity", "ModelCarActivity");
     }
 
     /************************************************************
@@ -173,7 +122,7 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         // TODO this is not called now, so we cannot flip the screen
-        Log.e("FreieCarActivity", "onConfigurationChanged");
+        Log.e("ModelCarActivity", "onConfigurationChanged");
         super.onConfigurationChanged(newConfig);
 
         // buildView(true);
@@ -197,7 +146,7 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     public void callPublishSpeed(short mode) {
         if (node == null) {
-            Log.e("FreieCarActivity", "Still doesn't have a connected node");
+            Log.e("ModelCarActivity", "Still doesn't have a connected node");
             return;
         }
         final Publisher<std_msgs.Int16> speed_pub =
@@ -210,7 +159,7 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     public void callPublishSteering(short mode) {
         if (node == null) {
-            Log.e("FreieCarActivity", "Still doesn't have a connected node");
+            Log.e("ModelCarActivity", "Still doesn't have a connected node");
             return;
         }
         final Publisher<std_msgs.Int16> steering_pub =
@@ -223,7 +172,7 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     public void callPublishStopStart(short mode) {
         if (node == null) {
-            Log.e("FreieCarActivity", "Still doesn't have a connected node");
+            Log.e("ModelCarActivity", "Still doesn't have a connected node");
             return;
         }
 
@@ -246,7 +195,7 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     @Override
     public void onStart(ConnectedNode connectedNode) {
-        Log.e("FreieCarActivity", connectedNode.getName() + " node started");
+        Log.e("ModelCarActivity", connectedNode.getName() + " node started");
         node = connectedNode;
 
         NameResolver appNameSpace = getMasterNameSpace();
@@ -294,7 +243,7 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
                 imageViewGPS.post(new Runnable() {
                     @Override
                     public void run() {
-                        geometry_msgs.Vector3  translation = message.getTranslation();
+                        geometry_msgs.Vector3 translation = message.getTranslation();
                         geometry_msgs.Quaternion rotation = message.getRotation();
 
                         // TODO rotation too
@@ -327,9 +276,9 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
         map.setBounds(0, 0, map.getIntrinsicWidth(), map.getIntrinsicHeight());
         map.draw(tempCanvas);
 
-        int markerSize_half = (int)(markerSize/2.0f);
-        marker.setBounds((int)xf - markerSize_half, (int)yf - markerSize_half,
-                (int)xf + markerSize_half, (int)yf + markerSize_half);
+        int markerSize_half = (int) (markerSize / 2.0f);
+        marker.setBounds((int) xf - markerSize_half, (int) yf - markerSize_half,
+                (int) xf + markerSize_half, (int) yf + markerSize_half);
         marker.draw(tempCanvas);
 
         imageViewGPS.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));
@@ -337,18 +286,18 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     @Override
     public void onError(Node n, Throwable e) {
-        Log.d("FreieCarActivity", n.getName() + " node error: " + e.getMessage());
+        Log.d("ModelCarActivity", n.getName() + " node error: " + e.getMessage());
     }
 
     @Override
     public void onShutdown(Node n) {
-        Log.d("FreieCarActivity", n.getName() + " node shuting down...");
+        Log.d("ModelCarActivity", n.getName() + " node shuting down...");
         callPublishStopStart(stop);//emergency stop active
     }
 
     @Override
     public void onShutdownComplete(Node n) {
-        Log.d("FreieCarActivity", n.getName() + " node shutdown completed");
+        Log.d("ModelCarActivity", n.getName() + " node shutdown completed");
     }
 
     @Override
