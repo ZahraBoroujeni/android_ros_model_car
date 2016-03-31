@@ -1,7 +1,7 @@
 package com.github.turtlebot.turtlebot_android.freieCar.view;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,11 +14,6 @@ import android.widget.Toast;
 
 import com.github.turtlebot.turtlebot_android.freieCar.FreieCarActivity;
 import com.github.turtlebot.turtlebot_android.freieCar.R;
-import com.github.turtlebot.turtlebot_android.freieCar.ScaledBitmapFromCompressedImage;
-
-import org.ros.android.MessageCallable;
-
-import sensor_msgs.CompressedImage;
 
 /**
  * Created by Daniel Neumann on 29.03.16.
@@ -29,7 +24,6 @@ public class ControlFragment extends Fragment {
     private Toast lastToast;
     private FreieCarActivity freieCarActivity;
     private short emergency_stop_mode = 1;
-    private final MessageCallable<Bitmap, CompressedImage> callable = new ScaledBitmapFromCompressedImage(2);
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,6 +39,15 @@ public class ControlFragment extends Fragment {
 
         freieCarActivity = (FreieCarActivity) getActivity();
         freieCarActivity.setLayoutControl(layout1);
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO this is not called now, so we cannot flip the screen
+        super.onConfigurationChanged(newConfig);
+
+        buildView(true);
     }
 
     private void buildView(boolean rebuild) {

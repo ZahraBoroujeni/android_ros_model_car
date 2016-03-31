@@ -17,6 +17,11 @@ import com.github.turtlebot.turtlebot_android.freieCar.R;
  */
 public class VisualGPSFragment extends Fragment {
 
+    public static final int mapId = R.drawable.map;
+    public static final int carMarkerId = R.drawable.model_car_marker;
+    public static final int mapXWidthCentimeter = 500;
+    public static final int mapYHeightCentimeter = 700;
+
     private FreieCarActivity freieCarActivity;
 
     @Override
@@ -35,8 +40,7 @@ public class VisualGPSFragment extends Fragment {
         ImageView imageView = (ImageView) getView().findViewById(R.id.gps_image_view);
         freieCarActivity.setLayoutGPS(layout, imageView);
 
-        freieCarActivity.drawMarker(400, 1200);
+        freieCarActivity.drawMarker(200, 400);
     }
-
 
 }

@@ -3,9 +3,6 @@ package com.github.turtlebot.turtlebot_android.freieCar;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
@@ -22,6 +19,7 @@ import android.widget.SeekBar;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 import com.github.turtlebot.turtlebot_android.freieCar.view.ViewPagerAdapter;
+import com.github.turtlebot.turtlebot_android.freieCar.view.VisualGPSFragment;
 
 import org.ros.address.InetAddressFactory;
 import org.ros.android.MessageCallable;
@@ -269,9 +267,9 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
             }
         });
 
-        String gpsImgTopic = appNameSpace.resolve("/camera/rgb/image_raw/compressed").toString();
+        String gpsImgTopic = appNameSpace.resolve("usb_cam/image_raw/compressed").toString();
 
-        Subscriber<sensor_msgs.CompressedImage> subscriberGpsImg = connectedNode.newSubscriber(panoImgTopic, sensor_msgs.CompressedImage._TYPE);
+        Subscriber<sensor_msgs.CompressedImage> subscriberGpsImg = connectedNode.newSubscriber(gpsImgTopic, sensor_msgs.CompressedImage._TYPE);
         subscriberGpsImg.addMessageListener(new MessageListener<CompressedImage>() {
             @Override
             public void onNewMessage(final sensor_msgs.CompressedImage message) {
@@ -287,7 +285,7 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
         });
 
 
-        String gpsTransformTopic = appNameSpace.resolve("/geometry_msgs/Transform").toString();
+        String gpsTransformTopic = appNameSpace.resolve("Transform").toString();
 
         Subscriber<geometry_msgs.Transform> subscriberGpsTf = connectedNode.newSubscriber(gpsTransformTopic, geometry_msgs.Transform._TYPE);
         subscriberGpsTf.addMessageListener(new MessageListener<geometry_msgs.Transform>() {
@@ -299,11 +297,8 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
                         geometry_msgs.Vector3  translation = message.getTranslation();
                         geometry_msgs.Quaternion rotation = message.getRotation();
 
-                        // TODO convert to pixel scale
-                        double map_length_centimeter = 700;
-                        double map_width_centimeter = 500;
-
-                        drawMarker((int) translation.getX(), (int) translation.getY());
+                        // TODO rotation too
+                        drawMarker(translation.getX(), translation.getY());
                     }
                 });
                 imageViewGPS.postInvalidate();
@@ -316,18 +311,27 @@ public class FreieCarActivity extends RosAppActivity implements NodeMain {
 
     }
 
-    public void drawMarker(int x, int y) {
-        Drawable d = ContextCompat.getDrawable(this, R.drawable.kitchen);
-        Bitmap tempBitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_4444);
+    public void drawMarker(double x, double y) {
+        Drawable map = ContextCompat.getDrawable(this, VisualGPSFragment.mapId);
+        Drawable marker = ContextCompat.getDrawable(this, VisualGPSFragment.carMarkerId);
+
+        // translation x in pixel = x_centimeter * image_width_pixel / map_width_centimeter
+        float xf = map.getIntrinsicWidth() * (float) x / (float) VisualGPSFragment.mapXWidthCentimeter;
+        // translation y in pixel = y_centimeter * image_height_pixel / map_height_centimeter
+        float yf = map.getIntrinsicHeight() * (float) y / (float) VisualGPSFragment.mapYHeightCentimeter;
+        float markerSize = map.getIntrinsicWidth() * 0.1f;   // size 10% of image width
+
+        Bitmap tempBitmap = Bitmap.createBitmap(map.getIntrinsicWidth(), map.getIntrinsicHeight(), Bitmap.Config.ARGB_4444);
         Canvas tempCanvas = new Canvas(tempBitmap);
-        Paint myPaint = new Paint();
-        myPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        myPaint.setColor(Color.GREEN);
-        myPaint.setStrokeWidth(10);
-        myPaint.setAlpha(220);
-        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-        d.draw(tempCanvas);
-        tempCanvas.drawRoundRect(new RectF(x, y, x + 150, y + 150), 75, 75, myPaint);
+
+        map.setBounds(0, 0, map.getIntrinsicWidth(), map.getIntrinsicHeight());
+        map.draw(tempCanvas);
+
+        int markerSize_half = (int)(markerSize/2.0f);
+        marker.setBounds((int)xf - markerSize_half, (int)yf - markerSize_half,
+                (int)xf + markerSize_half, (int)yf + markerSize_half);
+        marker.draw(tempCanvas);
+
         imageViewGPS.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));
     }
 

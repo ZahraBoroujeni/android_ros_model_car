@@ -7,5 +7,6 @@
     <string name="steering">Steering</string>
     <string name="emergency_stop">emergency_stop</string>
     <string name="speed">Speed</string>
+    <string name="MapViewContentDescription">MapView</string>
 
 </resources>
