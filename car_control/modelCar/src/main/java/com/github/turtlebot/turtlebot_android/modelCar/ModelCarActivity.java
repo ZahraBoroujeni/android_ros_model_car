@@ -246,8 +246,15 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
                         geometry_msgs.Vector3 translation = message.getTranslation();
                         geometry_msgs.Quaternion rotation = message.getRotation();
 
-                        // TODO rotation too
-                        drawMarker(translation.getX(), translation.getY());
+                        // rotation for z-axis = atan2(2*(qw*qz+qx*qy),1-2*(qx^2+qy^2))
+                        double qw = rotation.getW();
+                        double qx = rotation.getX();
+                        double qy = rotation.getY();
+                        double qz = rotation.getZ();
+
+                        double rotation_angle = Math.atan2(2 * (qw * qz + qx * qy), 1 - 2 * (qx * qx + qy * qy));
+                        double degree = rotation_angle * 180.0 / Math.PI;
+                        drawMarker(translation.getX(), translation.getY(), degree);
                     }
                 });
                 imageViewGPS.postInvalidate();
@@ -260,7 +267,13 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
 
     }
 
-    public void drawMarker(double x, double y) {
+    /**
+     *
+     * @param x in centimeter
+     * @param y in centimeter
+     * @param rotation_angle in degree
+     */
+    public void drawMarker(double x, double y, double rotation_angle) {
         Drawable map = ContextCompat.getDrawable(this, VisualGPSFragment.mapId);
         Drawable marker = ContextCompat.getDrawable(this, VisualGPSFragment.carMarkerId);
 
@@ -279,9 +292,13 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
         int markerSize_half = (int) (markerSize / 2.0f);
         marker.setBounds((int) xf - markerSize_half, (int) yf - markerSize_half,
                 (int) xf + markerSize_half, (int) yf + markerSize_half);
-        marker.draw(tempCanvas);
 
-        imageViewGPS.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));
+        tempCanvas.save();
+        tempCanvas.rotate((float)rotation_angle, xf, yf);
+        marker.draw(tempCanvas);
+        tempCanvas.restore();
+
+        imageViewGPS.setImageBitmap(tempBitmap);
     }
 
     @Override
