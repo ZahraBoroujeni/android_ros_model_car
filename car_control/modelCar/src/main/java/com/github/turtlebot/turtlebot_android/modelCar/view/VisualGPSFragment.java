@@ -44,7 +44,7 @@ public class VisualGPSFragment extends Fragment {
         ImageView imageView = (ImageView) getView().findViewById(R.id.gps_image_view);
         modelCarActivity.setLayoutGPS(layout, imageView);
 
-        simulatedDrive();
+        // simulatedDrive();
     }
 
 
