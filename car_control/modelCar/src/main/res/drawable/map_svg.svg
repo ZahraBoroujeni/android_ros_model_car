@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="kitchen.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-127.85714"
+     inkscape:cy="748.57143"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1534"
+     inkscape:window-height="922"
+     inkscape:window-x="207"
+     inkscape:window-y="167"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000"
+       d="M 1.4944149,421.21933 C 1.4947006,312.79075 1.8503417,268.84912 2.2847289,323.57124 2.719116,378.29337 2.7188823,467.00766 2.2842094,520.7141 1.8495369,574.42055 1.4941291,529.6479 1.4944149,421.21933 z"
+       id="path3765"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#000000"
+       id="rect3769"
+       width="760"
+       height="1062.8572"
+       x="-5.7142859"
+       y="-1.9235317" />
+    <rect
+       style="fill:#ececec"
+       id="rect3771"
+       width="108.57145"
+       height="734.28577"
+       x="-5.7142859"
+       y="-1.9235274"
+       ry="0" />
+    <rect
+       style="fill:#ececec"
+       id="rect3773"
+       width="168.57143"
+       height="97.14286"
+       x="280"
+       y="-7.6378174" />
+    <rect
+       style="fill:#ececec"
+       id="rect3775"
+       width="545.71423"
+       height="111.42854"
+       x="208.57143"
+       y="949.50507" />
+    <path
+       style="fill:#ececec;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -5.7142857,860.93361 42.8571427,17.14286 28.571429,11.42857 25.714286,8.57143 34.285708,42.85714 11.42857,22.85715 2.85715,31.42857 0,57.14287 -145.7142857,5.7143 z"
+       id="path3785"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-451.93671"
+       y="61.64481"
+       id="text3787"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3789"
+         x="-451.93671"
+         y="61.64481">cupboard</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="311.42859"
+       y="49.505039"
+       id="text3791"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3793"
+         x="311.42859"
+         y="49.505039">table</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-1012.4961"
+       y="72.815292"
+       id="text3795"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3797"
+         x="-1012.4961"
+         y="72.815292">door</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="411.42856"
+       y="1018.0765"
+       id="text3799"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="411.42856"
+         y="1018.0765"
+         id="tspan2996">kitchen</tspan></text>
+  </g>
+</svg>
