@@ -252,7 +252,7 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
                         double qy = rotation.getY();
                         double qz = rotation.getZ();
 
-                        double rotation_angle = Math.atan2(2 * (qw * qz + qx * qy), 1 - 2 * (qx * qx + qy * qy));
+                        double rotation_angle = Math.atan2(2 * (qw * qz + qx * qy), 1 - 2 * (qy * qy + qz * qz));
                         double degree = rotation_angle * 180.0 / Math.PI;
                         drawMarker(translation.getX(), translation.getY(), degree);
                     }
@@ -268,9 +268,8 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
     }
 
     /**
-     *
-     * @param x in centimeter
-     * @param y in centimeter
+     * @param x              in centimeter
+     * @param y              in centimeter
      * @param rotation_angle in degree
      */
     public void drawMarker(double x, double y, double rotation_angle) {
@@ -294,7 +293,7 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
                 (int) xf + markerSize_half, (int) yf + markerSize_half);
 
         tempCanvas.save();
-        tempCanvas.rotate((float)rotation_angle, xf, yf);
+        tempCanvas.rotate((float) rotation_angle, xf, yf);
         marker.draw(tempCanvas);
         tempCanvas.restore();
 

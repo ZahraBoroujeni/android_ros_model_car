@@ -27,7 +27,7 @@ dependencies {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+  compileSdkVersion 23
 
   defaultConfig {
     minSdkVersion 16
@@ -37,7 +37,7 @@ android {
   }
   productFlavors {
     indigo {
-      applicationId "com.github.autoauto.car_control.freieCar.indigo"
+      applicationId "com.github.autoauto.car_control.modelCar.indigo"
     }
   }
 }

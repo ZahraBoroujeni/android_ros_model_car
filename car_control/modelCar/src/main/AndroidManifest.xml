@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.github.turtlebot.turtlebot_android.modelCar"
-    android:versionCode="3"
-    android:versionName="1.0">
-
+    package="com.github.turtlebot.turtlebot_android.modelCar">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -14,7 +11,6 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         tools:replace="icon, label">
-
 
         <activity
             android:name="com.github.turtlebot.turtlebot_android.modelCar.ModelCarActivity"

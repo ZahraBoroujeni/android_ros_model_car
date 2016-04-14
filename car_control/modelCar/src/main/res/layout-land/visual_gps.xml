@@ -35,7 +35,7 @@
             android:orientation="vertical"
             android:layout_weight="0.5"
             android:contentDescription="@string/MapViewContentDescription"
-            android:src="@drawable/map"/>
+            android:src="@drawable/map" />
 
     </LinearLayout>
 
