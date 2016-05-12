@@ -31,16 +31,28 @@
 
                 <ImageButton
                     android:id="@+id/button_stop"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/emergency_stop"
                     android:gravity="start"
                     android:src="@drawable/emergency_stop_active" />
+
+                <ToggleButton
+                    android:layout_width="84dp"
+                    android:layout_height="wrap_content"
+                    android:textOff="BLINK L"
+                    android:textOn="BLINK L"
+                    android:id="@+id/toggleButtonBlinkL" />
+                <ToggleButton
+                    android:layout_width="84dp"
+                    android:layout_height="wrap_content"
+                    android:textOff="BLINK R"
+                    android:textOn="BLINK R"
+                    android:id="@+id/toggleButtonBlinkR" />
 
                 <LinearLayout
                     android:id="@+id/terminal"
@@ -63,7 +75,9 @@
                 android:max="2000"
                 android:progress="1000"
                 android:rotation="270"
-                android:text="@string/speed" />
+                android:text="@string/speed"
+                android:progressDrawable="@drawable/apptheme_scrubber_progress_horizontal_holo_light"
+                android:thumb="@drawable/apptheme_scrubber_control_normal_holo"/>
 
             <LinearLayout
                 android:id="@+id/bottom_bar"
@@ -84,7 +98,9 @@
                     android:layout_weight="0.4"
                     android:max="100"
                     android:progress="50"
-                    android:text="@string/steering" />
+                    android:text="@string/steering"
+                    android:progressDrawable="@drawable/apptheme_scrubber_progress_horizontal_holo_light"
+                    android:thumb="@drawable/apptheme_scrubber_control_normal_holo" />
 
                 <LinearLayout
                     android:id="@+id/extra"

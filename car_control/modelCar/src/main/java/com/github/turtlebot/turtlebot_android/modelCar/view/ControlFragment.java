@@ -7,10 +7,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.github.turtlebot.turtlebot_android.modelCar.ModelCarActivity;
 import com.github.turtlebot.turtlebot_android.modelCar.R;
@@ -24,6 +26,12 @@ public class ControlFragment extends Fragment {
     private Toast lastToast;
     private ModelCarActivity modelCarActivity;
     private short emergency_stop_mode = 1;
+
+    boolean blinker_turn_off_other = false;
+    final String BLINKER_LEFT = "le";
+    final String BLINKER_RIGHT = "ri";
+    final String BLINKER_OFF = "diL";
+    final String BLINKER_STOP = "stop";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,6 +82,13 @@ public class ControlFragment extends Fragment {
         if (rebuild)
             steeringBar.setProgress(prevSteeringBar.getProgress());
 
+
+        ToggleButton toggleButtonBlinkLeft = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkL);
+        toggleButtonBlinkLeft.setOnCheckedChangeListener(toggleButtonBlinkLeftListener);
+
+        ToggleButton toggleButtonBlinkRight = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkR);
+        toggleButtonBlinkRight.setOnCheckedChangeListener(toggleButtonBlinkRightListener);
+
         // Take a reference to the image view to show incoming panoramic pictures
         layout1 = (RelativeLayout) getView().findViewById(R.id.main_inner);
 
@@ -104,9 +119,77 @@ public class ControlFragment extends Fragment {
                 SeekBar speedBar1 = (SeekBar) getView().findViewById(R.id.seekBar_speed);
                 speedBar1.setProgress(1000);
 
+                blinker_turn_off_other = true;
+                ToggleButton toggleButtonBlinkLeft = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkL);
+                toggleButtonBlinkLeft.setChecked(false);
+                blinker_turn_off_other = true;
+                ToggleButton toggleButtonBlinkRight = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkR);
+                toggleButtonBlinkRight.setChecked(false);
+                modelCarActivity.callPublishBlinkerLight(BLINKER_STOP);
+
             }
         }
 
+    };
+
+    private final ToggleButton.OnCheckedChangeListener toggleButtonBlinkLeftListener = new CompoundButton.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+            if (lastToast == null)
+                lastToast = Toast.makeText(modelCarActivity.getBaseContext(), "", Toast.LENGTH_SHORT);
+
+            if(isChecked) {
+                modelCarActivity.callPublishBlinkerLight(BLINKER_LEFT);
+
+                blinker_turn_off_other = true;
+                ToggleButton toggleButtonBlinkRight = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkR);
+                toggleButtonBlinkRight.setChecked(false);
+
+
+                lastToast.setText("blink left");
+                lastToast.show();
+            } else if(!blinker_turn_off_other) {
+                modelCarActivity.callPublishBlinkerLight(BLINKER_OFF);
+            }
+
+            if(blinker_turn_off_other) {
+                blinker_turn_off_other = false;
+            }
+
+        }
+    };
+
+    private final ToggleButton.OnCheckedChangeListener toggleButtonBlinkRightListener = new CompoundButton.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+            if (lastToast == null)
+                lastToast = Toast.makeText(modelCarActivity.getBaseContext(), "", Toast.LENGTH_SHORT);
+
+            if(isChecked) {
+                modelCarActivity.callPublishBlinkerLight(BLINKER_RIGHT);
+
+                blinker_turn_off_other = true;
+                ToggleButton toggleButtonBlinkLeft = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkL);
+                toggleButtonBlinkLeft.setChecked(false);
+
+
+                lastToast.setText("blink right");
+                lastToast.show();
+            } else if(!blinker_turn_off_other) {
+                modelCarActivity.callPublishBlinkerLight(BLINKER_OFF);
+            }
+
+            if(blinker_turn_off_other) {
+                blinker_turn_off_other = false;
+            }
+
+        }
     };
 
 
@@ -119,9 +202,9 @@ public class ControlFragment extends Fragment {
             lastProgress = (short) (seekBar.getMax() / 2 - progress);
             modelCarActivity.callPublishSpeed(lastProgress);
             if (lastToast == null)
-                lastToast = Toast.makeText(modelCarActivity.getBaseContext(), -lastProgress + " deg/s", Toast.LENGTH_SHORT);
+                lastToast = Toast.makeText(modelCarActivity.getBaseContext(), -lastProgress + " rpm", Toast.LENGTH_SHORT);
             else
-                lastToast.setText(-lastProgress + " deg/s");
+                lastToast.setText(-lastProgress + " rpm");
 
             lastToast.show();
         }
