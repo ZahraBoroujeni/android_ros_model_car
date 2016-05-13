@@ -27,7 +27,7 @@ public class ControlFragment extends Fragment {
     private ModelCarActivity modelCarActivity;
     private short emergency_stop_mode = 1;
 
-    boolean blinker_turn_off_other = false;
+    boolean blinker_not_publishing = false;
     final String BLINKER_LEFT = "le";
     final String BLINKER_RIGHT = "ri";
     final String BLINKER_OFF = "diL";
@@ -112,6 +112,15 @@ public class ControlFragment extends Fragment {
                 emergency_stop_mode = 0;
                 modelCarActivity.callPublishStopStart(emergency_stop_mode);
                 emergency_stopButton.setImageResource(R.drawable.emergency_stop_inactive);
+
+                blinker_not_publishing = true;
+                ToggleButton toggleButtonBlinkLeft = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkL);
+                toggleButtonBlinkLeft.setChecked(false);
+                blinker_not_publishing = true;
+                ToggleButton toggleButtonBlinkRight = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkR);
+                toggleButtonBlinkRight.setChecked(false);
+                modelCarActivity.callPublishBlinkerLight(BLINKER_OFF);
+
             } else {
                 emergency_stop_mode = 1;
                 modelCarActivity.callPublishStopStart(emergency_stop_mode);
@@ -119,10 +128,10 @@ public class ControlFragment extends Fragment {
                 SeekBar speedBar1 = (SeekBar) getView().findViewById(R.id.seekBar_speed);
                 speedBar1.setProgress(1000);
 
-                blinker_turn_off_other = true;
+                blinker_not_publishing = true;
                 ToggleButton toggleButtonBlinkLeft = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkL);
                 toggleButtonBlinkLeft.setChecked(false);
-                blinker_turn_off_other = true;
+                blinker_not_publishing = true;
                 ToggleButton toggleButtonBlinkRight = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkR);
                 toggleButtonBlinkRight.setChecked(false);
                 modelCarActivity.callPublishBlinkerLight(BLINKER_STOP);
@@ -137,26 +146,25 @@ public class ControlFragment extends Fragment {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-
-            if (lastToast == null)
-                lastToast = Toast.makeText(modelCarActivity.getBaseContext(), "", Toast.LENGTH_SHORT);
-
             if(isChecked) {
                 modelCarActivity.callPublishBlinkerLight(BLINKER_LEFT);
 
-                blinker_turn_off_other = true;
+                buttonView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.turnleft_active, 0, 0, 0);
+
+                blinker_not_publishing = true;
                 ToggleButton toggleButtonBlinkRight = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkR);
                 toggleButtonBlinkRight.setChecked(false);
 
-
-                lastToast.setText("blink left");
-                lastToast.show();
-            } else if(!blinker_turn_off_other) {
+            } else if(!blinker_not_publishing) {
                 modelCarActivity.callPublishBlinkerLight(BLINKER_OFF);
             }
 
-            if(blinker_turn_off_other) {
-                blinker_turn_off_other = false;
+            if(!isChecked) {
+                buttonView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.turnleft_inactive, 0, 0, 0);
+            }
+
+            if(blinker_not_publishing) {
+                blinker_not_publishing = false;
             }
 
         }
@@ -168,25 +176,25 @@ public class ControlFragment extends Fragment {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
-            if (lastToast == null)
-                lastToast = Toast.makeText(modelCarActivity.getBaseContext(), "", Toast.LENGTH_SHORT);
-
             if(isChecked) {
                 modelCarActivity.callPublishBlinkerLight(BLINKER_RIGHT);
 
-                blinker_turn_off_other = true;
+                buttonView.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.turnright_active, 0);
+
+                blinker_not_publishing = true;
                 ToggleButton toggleButtonBlinkLeft = (ToggleButton) getView().findViewById(R.id.toggleButtonBlinkL);
                 toggleButtonBlinkLeft.setChecked(false);
 
-
-                lastToast.setText("blink right");
-                lastToast.show();
-            } else if(!blinker_turn_off_other) {
+            } else if(!blinker_not_publishing) {
                 modelCarActivity.callPublishBlinkerLight(BLINKER_OFF);
             }
 
-            if(blinker_turn_off_other) {
-                blinker_turn_off_other = false;
+            if(!isChecked) {
+                buttonView.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.turnright_inactive, 0);
+            }
+
+            if(blinker_not_publishing) {
+                blinker_not_publishing = false;
             }
 
         }

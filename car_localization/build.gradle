@@ -17,6 +17,9 @@ apply from: "https://github.com/rosjava/rosjava_bootstrap/raw/indigo/gradle.grad
 
 buildscript {
     apply from: "https://github.com/rosjava/android_core/raw/indigo/buildscript.gradle"
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+    }
 }
 
 apply plugin: 'catkin'

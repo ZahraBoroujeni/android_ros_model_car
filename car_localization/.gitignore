@@ -5,6 +5,7 @@ build.xml
 local.properties
 proguard-project.txt
 .gradle
+gradle/
 build
 .project
 .classpath
