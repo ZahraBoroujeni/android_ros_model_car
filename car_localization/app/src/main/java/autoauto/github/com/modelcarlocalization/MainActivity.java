@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -24,6 +26,7 @@ import org.ros.node.NodeMain;
 import org.ros.node.NodeMainExecutor;
 import org.ros.node.topic.Subscriber;
 
+import autoauto.github.com.modelcarlocalization.view.ViewPagerAdapter;
 import sensor_msgs.CompressedImage;
 
 public class MainActivity extends RosAppActivity implements NodeMain {
@@ -37,6 +40,17 @@ public class MainActivity extends RosAppActivity implements NodeMain {
     public static final int CAR_MARKER_ID = R.drawable.model_car_marker;
     public static final int MAP_X_WIDTH_CENTIMETER = 500;
     public static final int MAP_Y_HEIGHT_CENTIMETER = 700;
+
+    /**
+     * The pager widget, which handles animation and allows swiping horizontally to access previous
+     * and next wizard steps.
+     */
+    private ViewPager mPager;
+
+    /**
+     * The pager adapter, which provides the pages to the view pager widget.
+     */
+    private PagerAdapter mPagerAdapter;
 
     public MainActivity() {
         super("ModelCarLocalization", "ModelCarLocalization");
@@ -55,13 +69,15 @@ public class MainActivity extends RosAppActivity implements NodeMain {
         setDefaultMasterName(getString(R.string.default_robot));
         setDefaultAppName(getString(R.string.default_app));
         setDashboardResource(R.id.top_bar);
-        setMainWindowResource(R.layout.visual_gps);
+        setMainWindowResource(R.layout.sliding_layout);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.visual_gps);
+        setContentView(R.layout.sliding_layout);
 
-        layoutGPS = (LinearLayout) findViewById(R.id.gps_camera);
-        imageViewGPS = (ImageView) findViewById(R.id.gps_image_view);
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
 
         // TODO Tricky solution to the StrictMode; the recommended way is by using AsyncTask
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -87,14 +103,20 @@ public class MainActivity extends RosAppActivity implements NodeMain {
         subscriberGpsImg.addMessageListener(new MessageListener<CompressedImage>() {
             @Override
             public void onNewMessage(final sensor_msgs.CompressedImage message) {
-                layoutGPS.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        BitmapDrawable ob = new BitmapDrawable(getResources(), callable.call(message));
-                        layoutGPS.setBackground(ob);
-                    }
-                });
-                layoutGPS.postInvalidate();
+
+                if (layoutGPS != null) {
+                    layoutGPS.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            BitmapDrawable ob = new BitmapDrawable(getResources(), callable.call(message));
+                            if (layoutGPS != null) {
+                                layoutGPS.setBackground(ob);
+                            }
+                        }
+                    });
+                    layoutGPS.postInvalidate();
+                }
+
             }
         });
 
@@ -105,24 +127,28 @@ public class MainActivity extends RosAppActivity implements NodeMain {
         subscriberGpsTf.addMessageListener(new MessageListener<geometry_msgs.Transform>() {
             @Override
             public void onNewMessage(final geometry_msgs.Transform message) {
-                imageViewGPS.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        geometry_msgs.Vector3 translation = message.getTranslation();
-                        geometry_msgs.Quaternion rotation = message.getRotation();
 
-                        // rotation for z-axis = atan2(2*(qw*qz+qx*qy),1-2*(qx^2+qy^2))
-                        double qw = rotation.getW();
-                        double qx = rotation.getX();
-                        double qy = rotation.getY();
-                        double qz = rotation.getZ();
+                if (imageViewGPS != null) {
+                    imageViewGPS.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            geometry_msgs.Vector3 translation = message.getTranslation();
+                            geometry_msgs.Quaternion rotation = message.getRotation();
 
-                        double rotation_angle = Math.atan2(2 * (qw * qz + qx * qy), 1 - 2 * (qy * qy + qz * qz));
-                        double degree = rotation_angle * 180.0 / Math.PI;
-                        drawMarker(translation.getX(), translation.getY(), degree);
-                    }
-                });
-                imageViewGPS.postInvalidate();
+                            // rotation for z-axis = atan2(2*(qw*qz+qx*qy),1-2*(qx^2+qy^2))
+                            double qw = rotation.getW();
+                            double qx = rotation.getX();
+                            double qy = rotation.getY();
+                            double qz = rotation.getZ();
+
+                            double rotation_angle = Math.atan2(2 * (qw * qz + qx * qy), 1 - 2 * (qy * qy + qz * qz));
+                            double degree = rotation_angle * 180.0 / Math.PI;
+                            drawMarker(translation.getX(), translation.getY(), degree);
+                        }
+                    });
+                    imageViewGPS.postInvalidate();
+                }
+
             }
         });
 
@@ -173,6 +199,11 @@ public class MainActivity extends RosAppActivity implements NodeMain {
         nodeMainExecutor.execute(this, nodeConfiguration.setNodeName("android/video_view"));
     }
 
+    public void setLayoutGPS(LinearLayout layout, ImageView imageView) {
+        this.layoutGPS = layout;
+        this.imageViewGPS = imageView;
+    }
+
     /**
      * @param x              in centimeter
      * @param y              in centimeter
@@ -203,6 +234,8 @@ public class MainActivity extends RosAppActivity implements NodeMain {
         marker.draw(tempCanvas);
         tempCanvas.restore();
 
-        imageViewGPS.setImageBitmap(tempBitmap);
+        if (imageViewGPS != null) {
+            imageViewGPS.setImageBitmap(tempBitmap);
+        }
     }
 }
