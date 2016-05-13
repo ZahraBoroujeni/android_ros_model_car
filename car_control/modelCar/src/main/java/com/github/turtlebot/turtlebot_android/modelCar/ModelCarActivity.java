@@ -190,7 +190,7 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
         node = connectedNode;
 
         NameResolver appNameSpace = getMasterNameSpace();
-        String panoImgTopic = appNameSpace.resolve("/camera/rgb/image_raw/compressed").toString();
+        String panoImgTopic = appNameSpace.resolve("/app/camera/rgb/image_raw/compressed").toString();
 
         Subscriber<sensor_msgs.CompressedImage> subscriber = connectedNode.newSubscriber(panoImgTopic, sensor_msgs.CompressedImage._TYPE);
         subscriber.addMessageListener(new MessageListener<CompressedImage>() {

@@ -81,7 +81,7 @@ public class MainActivity extends RosAppActivity implements NodeMain {
 
         NameResolver appNameSpace = getMasterNameSpace();
 
-        String gpsImgTopic = appNameSpace.resolve("usb_cam/image_raw/compressed").toString();
+        String gpsImgTopic = appNameSpace.resolve("/app/usb_cam/image_raw/compressed").toString();
 
         Subscriber<sensor_msgs.CompressedImage> subscriberGpsImg = connectedNode.newSubscriber(gpsImgTopic, sensor_msgs.CompressedImage._TYPE);
         subscriberGpsImg.addMessageListener(new MessageListener<CompressedImage>() {
@@ -99,7 +99,7 @@ public class MainActivity extends RosAppActivity implements NodeMain {
         });
 
 
-        String gpsTransformTopic = appNameSpace.resolve("Transform").toString();
+        String gpsTransformTopic = appNameSpace.resolve("/app/Transform").toString();
 
         Subscriber<geometry_msgs.Transform> subscriberGpsTf = connectedNode.newSubscriber(gpsTransformTopic, geometry_msgs.Transform._TYPE);
         subscriberGpsTf.addMessageListener(new MessageListener<geometry_msgs.Transform>() {
