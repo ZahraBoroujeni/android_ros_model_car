@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.RelativeLayout;
@@ -47,7 +46,7 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
-    private PagerAdapter mPagerAdapter;
+    private ViewPagerAdapter mPagerAdapter;
 
     private ConnectedNode node;
     private final MessageCallable<Bitmap, sensor_msgs.CompressedImage> callable = new ScaledBitmapFromCompressedImage(2);
@@ -91,7 +90,6 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
 
     @Override
     protected void onStop() {
-        callPublishStopStart(stop);//emergency stop active
         super.onStop();
     }
 
@@ -186,6 +184,8 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
 
     @Override
     public void onStart(ConnectedNode connectedNode) {
+        super.onStart();
+
         Log.e("ModelCarActivity", connectedNode.getName() + " node started");
         node = connectedNode;
 
@@ -212,10 +212,8 @@ public class ModelCarActivity extends RosAppActivity implements NodeMain {
         stop_pub = node.newPublisher("/manual_control/stop_start", std_msgs.Int16._TYPE);
         blinker_light_pub = node.newPublisher("/manual_control/lights", std_msgs.String._TYPE);
 
-        callPublishStopStart(stop);//emergency stop active
         SeekBar speedBar1 = (SeekBar) findViewById(R.id.seekBar_speed);
         speedBar1.setProgress(1000);
-
     }
 
     @Override

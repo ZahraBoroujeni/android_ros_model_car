@@ -39,7 +39,7 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/emergency_stop"
                     android:gravity="start"
-                    android:src="@drawable/emergency_stop_active" />
+                    android:src="@drawable/emergency_stop_inactive" />
 
                 <ToggleButton
                     android:layout_width="84dp"

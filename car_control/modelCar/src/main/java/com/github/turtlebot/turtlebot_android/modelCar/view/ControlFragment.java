@@ -25,7 +25,7 @@ public class ControlFragment extends Fragment {
     private RelativeLayout layout1;
     private Toast lastToast;
     private ModelCarActivity modelCarActivity;
-    private short emergency_stop_mode = 1;
+    private short emergency_stop_mode = 0;
 
     boolean blinker_not_publishing = false;
     final String BLINKER_LEFT = "le";
@@ -48,7 +48,6 @@ public class ControlFragment extends Fragment {
         modelCarActivity = (ModelCarActivity) getActivity();
         modelCarActivity.setLayoutControl(layout1);
     }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

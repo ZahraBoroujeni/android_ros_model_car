@@ -39,20 +39,22 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/emergency_stop"
                     android:gravity="start"
-                    android:src="@drawable/emergency_stop_active" />
+                    android:src="@drawable/emergency_stop_inactive" />
 
                 <ToggleButton
                     android:layout_width="84dp"
                     android:layout_height="wrap_content"
-                    android:textOff="BLINK L"
-                    android:textOn="BLINK L"
-                    android:id="@+id/toggleButtonBlinkL" />
+                    android:id="@+id/toggleButtonBlinkL"
+                    android:textOn=""
+                    android:textOff=""
+                    android:drawableLeft="@drawable/turnleft_inactive" />
                 <ToggleButton
                     android:layout_width="84dp"
                     android:layout_height="wrap_content"
-                    android:textOff="BLINK R"
-                    android:textOn="BLINK R"
-                    android:id="@+id/toggleButtonBlinkR" />
+                    android:id="@+id/toggleButtonBlinkR"
+                    android:textOn=""
+                    android:textOff=""
+                    android:drawableRight="@drawable/turnright_inactive" />
 
                 <LinearLayout
                     android:id="@+id/terminal"
