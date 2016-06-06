@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Model Car Status</string>
+    <string name="car_ip">192.168.43.102</string>
+</resources>

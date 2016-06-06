@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <name>car_localization_android</name>
+  <version>0.1.0</version>
+  <description>
+    Android applications and libraries for a model car.
+  </description>
+  <maintainer email="zahra.boroujeni@gmail.com">Zahra Boroujeni</maintainer>
+  <license>Apache 2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rosjava_build_tools</build_depend>
+  <build_depend>rosjava_bootstrap</build_depend>
+  <build_depend>android_core</build_depend>
+  <build_depend>android_apps</build_depend>
+  <build_depend>android_extras</build_depend>
+  <build_depend>rosjava_messages</build_depend>
+    <!--<build_depend>rosjava_core</build_depend>
+    <build_depend>create_node</build_depend>
+    <build_depend>diagnostic_msgs</build_depend>
+    <build_depend>turtlebot_follower</build_depend>
+    <build_depend>turtlebot_panorama</build_depend>-->
+</package>
