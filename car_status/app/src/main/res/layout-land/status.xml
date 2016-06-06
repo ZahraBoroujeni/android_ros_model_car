@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:padding="@dimen/activity_horizontal_margin"
-    tools:context="autoauto.github.com.car_status.MainActivity">
+    tools:context=".MainActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -78,6 +78,14 @@
                         android:layout_margin="5dp"
                         android:text="Top camera: "
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/status_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorNO"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -144,6 +152,35 @@
                 android:layout_marginTop="20dp"
                 android:layout_weight="0.45"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editTextIP"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/car_ip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/buttonRefresh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Refresh" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"

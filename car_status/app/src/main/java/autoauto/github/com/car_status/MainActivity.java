@@ -1,5 +1,6 @@
 package autoauto.github.com.car_status;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,13 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private final int REFRESH_DELAY = 20000;
 
     private SSHConnection connection;
+    private String connectionString;
 
     private final String CHECK_ROS_CORE = "ps -e | grep rosmaster";
     private final String CHECK_FT4232H_BOARD = "lsusb | grep FT4232H";
     private final String CHECK_ARDUINO = "ls /dev/ttyUSB3";
     private final String CHECK_MOTOR = "ls /dev/ttyUSB2";
     private final String CHECK_LIDAR = "ls /dev/ttyUSB0";
-    private final String CHECK_CAMERA_REALSENSE = "v4l2-ctl --list-devices | grep RealSense";
+    private final String CHECK_CAMERA_REALSENSE = "lsusb | grep \"Creative Technology\"";
     private final String CHECK_CAMERA_TOP = "v4l2-ctl --list-devices | grep 'USB 2.0 Camera'";
 
     @Override
@@ -36,7 +39,31 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e("car_status", "onCreate");
 
-        connection = new SSHConnection("root", "elfmeter", "192.168.43.102", 22);
+        connectionString = getString(R.string.car_ip);
+        connection = new SSHConnection("root", "elfmeter", connectionString, 22);
+
+        Button buttonRefresh = (Button) findViewById(R.id.buttonRefresh);
+        buttonRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearAll();
+
+                EditText editTextIP = (EditText) findViewById(R.id.editTextIP);
+                if(!connectionString.equals(editTextIP.getText().toString())) {
+                    connectionString = editTextIP.getText().toString();
+                    connection = new SSHConnection("root", "elfmeter", connectionString, 22);
+                }
+
+                sendAll();
+
+                Context context = getApplicationContext();
+                CharSequence text = "Status refreshes automatically every 20 seconds. Refreshing now...";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -57,11 +84,37 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             Log.d("car_status", "refreshing...");
 
+            EditText editTextIP = (EditText) findViewById(R.id.editTextIP);
+            if(!connectionString.equals(editTextIP.getText().toString())) {
+                clearAll();
+                connectionString = editTextIP.getText().toString();
+                connection = new SSHConnection("root", "elfmeter", connectionString, 22);
+            }
+
             sendAll();
 
             handler.postDelayed(runnableCode, REFRESH_DELAY);
         }
     };
+
+    private void clearAll() {
+        clear(R.id.status_ros);
+        clear(R.id.status_FT4232H_board);
+        clear(R.id.status_arduino_board);
+        clear(R.id.status_motor);
+        clear(R.id.status_lidar);
+        clear(R.id.status_front_camera);
+        clear(R.id.status_top_camera);
+        clear(R.id.status_error);
+    }
+
+    private void clear(int textViewId) {
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.status_layout);
+        TextView textView = (TextView) findViewById(textViewId);
+        textView.setText("");
+        textView.requestLayout();
+        linearLayout.requestLayout();
+    }
 
     private void sendAll() {
 
